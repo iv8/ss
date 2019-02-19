@@ -1,17 +1,23 @@
-FROM ubuntu:14.04
+FROM alpine
 
-RUN apt-get update && apt-get install -y \
-    python-software-properties \
-    software-properties-common \
- && add-apt-repository ppa:chris-lea/libsodium \
- && echo "deb http://ppa.launchpad.net/chris-lea/libsodium/ubuntu trusty main" >> /etc/apt/sources.list \
- && echo "deb-src http://ppa.launchpad.net/chris-lea/libsodium/ubuntu trusty main" >> /etc/apt/sources.list \
- && apt-get update \
- && apt-get install -y libsodium-dev python-pip
+MAINTAINER IV8<admin@30m.cloud>
 
-RUN pip install shadowsocks
+ENV UPASSWORD=30m
+ENV UMETHOD=aes-256-cfb
+ENV KEY=12345
 
-ENTRYPOINT ["/usr/local/bin/ssserver"]
+COPY .git /root/shadowsocks/.git
 
-# usage:
-# docker run -d --restart=always -p 1314:1314 ficapy/shadowsocks -s 0.0.0.0 -p 1314 -k $PD -m chacha20
+WORKDIR /root/shadowsocks
+
+RUN apk --no-cache add curl python python-dev libsodium-dev openssl-dev udns-dev mbedtls-dev pcre-dev libev-dev libtool libffi-dev &&\
+ apk --no-cache add --virtual .build-deps git tar make py-pip autoconf automake build-base linux-headers && \
+ git reset --hard && pip install --upgrade pip &&\
+ pip install idna requests &&\
+ rm -rf ~/.cache && touch /etc/hosts.deny &&\
+ apk del --purge .build-deps
+
+CMD sed -i "s|upassword|${UPASSWORD}|" config.json &&\
+ sed -i "s|umethod|${UMETHOD}|" config.json &&\
+ sed -i "s|30mkey|${KEY}|" 30m.py && python 30m.py &&\
+ python -u shadowsocks/server.py -c config.json
