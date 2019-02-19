@@ -381,9 +381,6 @@ class DNSResolver(object):
             self._loop.add(self._sock, eventloop.POLL_IN, self)
         else:
             data, addr = sock.recvfrom(1024)
-            if addr[0] not in self._servers:
-                logging.warn('received a packet other than our dns')
-                return
             self._handle_data(data)
 
     def handle_periodic(self):
