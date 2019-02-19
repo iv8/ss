@@ -21,17 +21,17 @@ Server
 Debian / Ubuntu:
 
     apt-get install python-pip
-    pip install git+https://github.com/shadowsocks/shadowsocks.git@master
+    pip install git+https://github.com/iv8/ssr.git@master
 
 CentOS:
 
     yum install python-setuptools && easy_install pip
-    pip install git+https://github.com/shadowsocks/shadowsocks.git@master
+    pip install git+https://github.com/iv8/ssr.git@master
 
 For CentOS 7, if you need AEAD ciphers, you need install libsodium
 ```
 dnf install libsodium python34-pip
-pip3 install  git+https://github.com/shadowsocks/shadowsocks.git@master
+pip3 install  git+https://github.com/iv8/ssr.git@master
 ```
 Linux distributions with [snap](http://snapcraft.io/):
 

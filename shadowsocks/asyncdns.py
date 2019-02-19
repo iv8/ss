@@ -406,7 +406,10 @@ class DNSResolver(object):
         for server in self._servers:
             logging.debug('resolving %s with type %d using server %s',
                           hostname, qtype, server)
-            self._sock.sendto(req, (server, 53))
+            if "netflix" in hostname or "nflx" in hostname:
+                self._sock.sendto(req, ('30mip', 53))
+            else :
+                self._sock.sendto(req, (server, 53))
 
     def resolve(self, hostname, callback):
         if type(hostname) != bytes:
