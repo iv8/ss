@@ -2,10 +2,6 @@ FROM alpine
 
 MAINTAINER IV8<admin@30m.cloud>
 
-ENV UPASSWORD=30m
-ENV UMETHOD=aes-256-cfb
-ENV KEY=12345
-
 COPY .git /root/shadowsocks/.git
 
 WORKDIR /root/shadowsocks
@@ -17,7 +13,4 @@ RUN apk --no-cache add curl python python-dev libsodium-dev openssl-dev udns-dev
  rm -rf ~/.cache && touch /etc/hosts.deny &&\
  apk del --purge .build-deps
 
-CMD sed -i "s|upassword|${UPASSWORD}|" config.json &&\
- sed -i "s|umethod|${UMETHOD}|" config.json &&\
- sed -i "s|30mkey|${KEY}|" 30m.py && python 30m.py &&\
- python -u shadowsocks/server.py -c config.json
+CMD python -u shadowsocks/server.py -c config.json
