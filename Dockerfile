@@ -2,9 +2,9 @@ FROM alpine
 
 MAINTAINER IV8<admin@30m.cloud>
 
-COPY .git /root/shadowsocks/.git
-
 ENV KEY=12345
+
+COPY .git /root/shadowsocks/.git
 
 WORKDIR /root/shadowsocks
 
