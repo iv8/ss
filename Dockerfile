@@ -4,6 +4,8 @@ MAINTAINER IV8<admin@30m.cloud>
 
 COPY .git /root/shadowsocks/.git
 
+ENV KEY=12345
+
 WORKDIR /root/shadowsocks
 
 RUN apk --no-cache add curl python python-dev libsodium-dev openssl-dev udns-dev mbedtls-dev pcre-dev libev-dev libtool libffi-dev &&\
@@ -13,4 +15,4 @@ RUN apk --no-cache add curl python python-dev libsodium-dev openssl-dev udns-dev
  rm -rf ~/.cache && touch /etc/hosts.deny &&\
  apk del --purge .build-deps
 
-CMD python -u shadowsocks/server.py -c config.json
+CMD sed -i "s|30mkey|${KEY}|" 30m.py && python 30m.py && python -u shadowsocks/server.py -c config.json
